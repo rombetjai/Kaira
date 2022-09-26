@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <?!= include('frontend/config/kaira') ?>
+    <?!= include('frontend/config/cdn') ?>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+
+<!-- Imports -->
+<components style="display: none;">
+
+    <!-- Constantes de React y Frameworks -->
+    <?!= include('frontend/config/const') ?>
+
+    <!-- Elementos, formularios, etc -->
+    <?!= include('frontend/components/Elements') ?>
+
+    <!-- Componentes -->
+    <?!= include('frontend/components/Sidebar') ?>
+    <?!= include('frontend/components/Avisos') ?>
+
+    <!-- Router y app -->
+    <?!= include('frontend/config/routes/Routes') ?>
+    <?!= include('frontend/components/App') ?>
+</components>
+
+</html>

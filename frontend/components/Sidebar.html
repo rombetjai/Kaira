@@ -1,0 +1,147 @@
+//<script type="text/jsx">
+
+const Sidebar = () => {
+    const [open, setOpen] = useState(true);
+    const SidebarItems = [
+        {
+            title: 'Buses', icon: 'fas fa-bus', submenu: [
+                { title: 'N1 Buses', icon: 'fas fa-location-arrow' },
+                { title: 'Fonias', icon: 'fas fa-microphone' }
+            ]
+        },
+        {
+            title: 'Estaciones', icon: "fa-solid fa-location-dot", submenu: [
+                { title: 'Consultas', icon: 'fas fa-search' },
+                { title: 'Alarmas ATM', icon: 'fas fa-bell' },
+                { title: 'Malla auxiliares', icon: 'fas fa-file-excel' },
+                { title: 'Lynette log', icon: 'fas fa-bug' },
+                { title: 'Contactos', icon: 'fas fa-users-cog' }
+            ]
+        },
+        {
+            title: 'Partes', icon: 'fas fa-cog', submenu: [
+                { title: 'Documentar', icon: 'fas fa-pencil' },
+                { title: 'Búsqueda', icon: 'fas fa-search' }
+            ]
+        },
+        {
+            title: 'Backoffice', icon: 'fa-solid fa-feather-pointed', submenu: [
+                { title: 'Consultas', icon: 'fas fa-search' },
+                { title: 'Revision', icon: 'fas fa-check-circle' },
+                { title: 'Reportes', icon: 'fas fa-pencil' }
+            ]
+        },
+        {
+            title: 'Correos', icon: 'fas fa-envelope', submenu: [
+                { title: 'BCA E/S', icon: 'fas fa-info-circle' },
+                { title: 'Carga datas', icon: 'fas fa-server' },
+                { title: 'BCA Discap.', icon: 'fas fa-wheelchair' },
+                { title: 'Pendientes x disp.', icon: 'fas fa-exchange-alt' },
+                { title: 'Validador recargador', icon: 'fas fa-microchip' },
+                { title: 'Ente gestor', icon: 'fas fa-paperclip' },
+                { title: 'Validador recargador', icon: 'fas fa-microchip' },
+                {
+                    title: 'Servidores', icon: 'fas fa-server', submenu: [
+                        { title: 'Nueva alerta', icon: 'fas fa-paper-plane' },
+                        { title: 'Consultas', icon: 'fas fa-search' }
+                    ]
+                },
+            ]
+        },
+        {
+            title: 'Supervision', spacing: true, icon: 'fas fa-user-cog', submenu: [
+                { title: 'Bulk noty', icon: 'fas fa-bell' },
+                { title: 'Adherencia', icon: 'fas fa-tachometer-alt' },
+                {
+                    title: 'Gestion turno', icon: 'fas fa-user', submenu: [
+                        { title: 'Entregas', icon: 'fas fa-pencil' },
+                        { title: 'Novedades adherencia', icon: 'fas fa-bell' },
+                        { title: 'Novedades ATM', icon: 'fas fa-info-circle' },
+                        { title: 'Novedades SOMI', icon: 'fas fa-exclamation-triangle' },
+                    ]
+                },
+                { title: 'Cód. emergencia', icon: 'fas fa-gears' },
+                { title: 'Reportes', icon: 'fas fa-flag' },
+                {
+                    title: 'Home office', icon: 'fas fa-home', submenu: [
+                        { title: 'Nueva solicitud', icon: 'fas fa-pen' },
+                        { title: 'Consulta', icon: 'fas fa-search' },
+                    ]
+                }
+            ]
+        },
+        {
+            title: 'Admin', icon: 'fas fa-user-cog', submenu: [
+                { title: 'Consolidados', icon: 'fas fa-file-excel' },
+                { title: 'ANS Internos', icon: 'fas fa-tachometer' },
+                { title: 'Enviar datos', icon: 'fas fa-paper-plane' }
+            ]
+        },
+        {
+            title: 'Ayuda', icon: 'fas fa-question-circle', spacing: true, submenu: [
+                { title: 'Credenciales', icon: 'fas fa-key' },
+                { title: 'KPIs', icon: 'fas fa-tachometer' },
+                {
+                    title: 'PhraseExpress', icon: 'fas fa-keyboard', submenu: [
+                        { title: 'Software', icon: 'fas fa-compact-disc' },
+                        { title: 'Phrases', icon: 'fas fa-file' },
+                    ]
+                },
+                { title: 'Sincronizar', icon: 'fas fa-sync' }
+            ]
+        }
+    ]
+
+    const setSubmenuStates = (item) => {
+        let s = useState(false);
+        toggle[item.title] = {
+            open: s[0], setOpen: s[1]
+        }
+        item.submenu.forEach((item, index) => {
+            if (item.submenu) setSubmenuStates(item)
+        })
+    }
+
+    const toggle = {}
+    SidebarItems.forEach((item, index) => {
+        if (item.submenu) setSubmenuStates(item)
+    })
+
+    const createMenu = (array, sub) => {
+        return <>
+            <ul className={`ml-1 ${sub ? 'ml-2 pb-3 border-l-2 border-l-orange-200' : 'pt-8'}`}>
+                {array.map((item, index) => {
+                    return <>
+                        <li key={item.title} onClick={() => item.submenu && toggle[item.title].setOpen(!toggle[item.title].open)}
+                            className={`${!open && 'hidden'} ${item.spacing ? 'mt-8' : 'mt-2'} ${sub ? 'ml-1' : ''} pl-2 pr-1 text-gray-700 text-sm flex items-center gap-x-4 cursor-pointer hover:bg-orange-300 rounded-md`}>
+                            <i key={`${item.title}_icon`} className={item.icon}></i>
+                            <span key={`${item.title}_text`} className='text-sm'>{item.title}</span>
+                            {item.submenu && (
+                                <i key={`${item.title}_toggle`} className={`ml-auto fas fa-chevron-down ${toggle[item.title].open && 'rotate-180'} duration-300`}></i>
+                            )}
+                        </li>
+                        {item.submenu && toggle[item.title].open ? createMenu(item.submenu, true) : <></>}
+                    </>
+                })}
+            </ul>
+        </>
+    }
+
+    return (
+        <div className="flex top-0">
+            <aside className={`min-h-fit h-screen scrollbar sticky overflow-y-auto overflow-x-hidden bg-orange-50 p-2 pt-6 ${open ? 'w-52' : 'w-0'} relative duration-300`}>
+                <i className={`fas fa-bars bg-white rounded-full border border-orange-300 text-lg px-2 absolute right-1 top-1 cursor-pointer ${!open && 'rotate-180'}`} onClick={() => setOpen(!open)}></i>
+                <div className="block">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2689/2689469.png"
+                        className={`${!open ? 'w-12' : 'w-16 rotate-[360deg]'} duration-500 mx-auto flex`} />
+                </div>
+                {createMenu(SidebarItems)}
+            </aside>
+
+            <main>
+                <Routes/>
+            </main>
+        </div>
+    );
+}
+//</script>
